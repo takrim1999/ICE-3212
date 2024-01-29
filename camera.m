@@ -1,1 +1,0 @@
-cam = webcam(0);
