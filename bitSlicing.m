@@ -1,4 +1,4 @@
-im = imread("~/Desktop/DIP/Matlab/pictures/cats.jpg","jpg");
+im = imread("~/Desktop/ICE-3212/Images/number.jpg");
 im = makeGray(im);
 figure(1)
 imshow(im)
