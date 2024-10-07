@@ -1,0 +1,350 @@
+1. Write a program for adding and subtraction of two images.
+clc;
+clear;
+close;
+img1 = imread('cameraman.tif');
+img2 = imread('rice.png');
+add = img1+img2;
+sub = img1-img2;
+figure(1)
+imshow(add)
+title('Addition of two image')
+figure(2)
+imshow(sub)
+title('Subtraction of two image')
+2. Write a program to negative an image.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+neg = 255-img;
+figure
+subplot(211)
+imshow(img);
+title('Original image')
+subplot(212)
+imshow(neg)
+title('Negetive image')
+
+3. Write a program to convert color image to gray-level image.
+clc;
+clear;
+close;
+img = imread('onion.png');
+R = img(:,:,1);
+G = img(:,:,2);
+B = img(:,:,3);
+gray = R*0.2989+G*0.5870+B*0.1140;
+figure
+subplot(211)
+imshow(img)
+title('Color image');
+subplot(212)
+imshow(gray)
+title('Gray Formation of Color image');
+
+
+4. Write a program to convert an image into binary /Monochrome using proper threshold.
+clc;
+clear;
+close;
+img = imread('onion.png');
+%if tell Color image to binay converstion then
+R = img(:,:,1);
+G = img(:,:,2);
+B = img(:,:,3);
+gray = R*0.2989+G*0.5870+B*0.1140;
+Th = 128;
+%if tell gray to digital then
+%binary = img>Th;
+binary = gray>Th;
+figure
+subplot(211)
+imshow(img)
+title('Gray image')
+subplot(212)
+imshow(binary)
+title('Binary formation of Gray image');
+
+
+5.Write a program for zooming and shrinking image.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+[width,height] = size(img);
+factor = 3;
+new_width = ceil(width*factor);
+new_height = ceil(height*factor);
+new_img = uint8(zeros(new_width,new_height));
+for i=1:new_width
+    for j=1:new_height
+        new_img(i,j) = img(ceil(i*width/new_width),ceil(j*height/new_height));
+    end
+end
+factor1 = 0.5;
+new_width1 = ceil(width*factor1);
+new_height1 = ceil(height*factor1);
+new_img1 = uint8(zeros(new_width1,new_height1));
+for i=1:new_width1
+    for j=1:new_height1
+        new_img1(i,j) = img(ceil(i*width/new_width1),ceil(j*height/new_height1));
+    end
+end
+figure(1)
+imshow(img)
+title('Original image')
+figure(2)
+imshow(new_img)
+title('Zooming image')
+figure(3)
+imshow(img)
+title('Original image')
+figure(4)
+imshow(new_img1)
+title('Shrinking image')
+
+6.Write a program to show the histrogram of an image.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+[rows,cols] = size(img);
+histogram = zeros(1,256);
+for i=1:rows
+    for j=1:cols
+        gray_val = img(i,j);
+        histogram(gray_val+1) = histogram(gray_val+1)+1;
+    end
+end
+figure
+subplot(211)
+imshow(img)
+title('Original image')
+subplot(212)
+bar(histogram)
+title('Histogram of image')
+
+7.Write a program to show the effect of log transformation of an image.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+new_img = im2double(img);
+c = 1;
+trans_img = c * log(1+new_img);
+figure
+subplot(211)
+imshow(img)
+title('Original image')
+subplot(212)
+imshow(trans_img)
+title('Log Transformation of an image')
+
+
+8.Write a program to show the effect of power-law(or Gamma correction) for image enhancement.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+new_img = im2double(img);
+c = 1;
+gamma = 0.5;
+trans_img = c*(new_img.^gamma);
+figure
+subplot(211)
+imshow(img)
+title('Original Image')
+subplot(212)
+imshow(trans_img)
+title('Gamma Correction of an image')
+
+9.Write a program to show the effect of histrogram equalization  of an image.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+[rows,cols] = size(img);
+histogram = zeros(1,256);
+for i=1:rows
+    for j=1:cols
+        intensity = img(i,j);
+        histogram(intensity+1) = histogram(intensity+1)+1;
+    end
+end
+pdf = histogram/(rows*cols);
+cdf = zeros(1,256);
+cdf(1) = pdf(1);
+for k=2:256
+    cdf(k) = cdf(k-1)+pdf(k);
+end
+eq_intensity = round(cdf*255);
+eq_img = uint8(zeros(rows,cols));
+for i=1:rows
+    for j=1:cols
+        eq_img(i,j) = eq_intensity(img(i,j)+1);
+    end
+end
+eq_histogram = zeros(1,256);
+for i=1:rows
+    for j=1:cols
+        intensity = eq_img(i,j);
+        eq_histogram(intensity+1) = eq_histogram(intensity+1)+1;
+    end
+end
+figure
+subplot(221)
+imshow(img)
+title('Original image')
+subplot(222)
+bar(histogram)
+title('Histogram of an image')
+subplot(223)
+imshow(eq_img)
+title('Enhanced Image')
+subplot(224)
+bar(eq_histogram)
+title('Histogram of enhanced image')
+
+10.Write a program for bit plane slicing of 8 bit image.
+clc;
+clear;
+close;
+ 
+% Read the image
+img = imread('coins.png');
+I = double(img);
+ 
+% Define the my_mod function
+my_mod = @(a, b) a - floor(a ./ b) .* b;
+ 
+p0 = my_mod(I, 2);
+p1 = my_mod(floor(I ./ 2), 2);
+p2 = my_mod(floor(I ./ 4), 2);
+p3 = my_mod(floor(I ./ 8), 2);
+p4 = my_mod(floor(I ./ 16), 2);
+p5 = my_mod(floor(I ./ 32), 2);
+p6 = my_mod(floor(I ./ 64), 2);
+p7 = my_mod(floor(I ./ 128), 2);
+ 
+bit0 = p0 .* 2.^0;
+bit1 = p1 .* 2.^1;
+bit2 = p2 .* 2.^2;
+bit3 = p3 .* 2.^3;
+bit4 = p4 .* 2.^4;
+bit5 = p5 .* 2.^5;
+bit6 = p6 .* 2.^6;
+bit7 = p7 .* 2.^7;
+ 
+re_img = bit0 + bit1 + bit2 + bit3 + bit4 + bit5 + bit6 + bit7;
+re_img = uint8(re_img);
+ 
+% Display the bit planes and reconstructed image
+figure
+sgtitle('Bit Plane Slicing','Color','red','FontSize',18)
+subplot(421)
+imshow(p0)
+title('Bit plane 1')
+subplot(422)
+imshow(p1)
+title('Bit plane 2')
+subplot(423)
+imshow(p2)
+title('Bit plane 3')
+subplot(424)
+imshow(p3)
+title('Bit plane 4')
+subplot(425)
+imshow(p4)
+title('Bit plane 5')
+subplot(426)
+imshow(p5)
+title('Bit plane 6')
+subplot(427)
+imshow(p6)
+title('Bit plane 7')
+subplot(428)
+imshow(p7)
+title('Bit plane 8')
+ 
+figure(2)
+subplot(121)
+imshow(img)
+title('Original image');
+ 
+subplot(122)
+imshow(re_img)
+title('Reconstructed image');
+
+
+11.Write a program for smoothing of an image by mean filter.
+clc;
+clear;
+close;
+img = imread('cameraman.tif');
+noise_img = imnoise(img,'salt & pepper',0.01);
+[rows,cols] = size(noise_img);
+new_img = zeros(rows,cols);
+for i=2:rows-1
+    for j=2:cols-1
+        intensity = [img(i-1,j-1),img(i-1,j),img(i-1,j+1),...
+            img(i,j-1),img(i,j),img(i,j+1),...
+            img(i+1,j-1),img(i+1,j),img(i+1,j+1)];
+        avg = sum(intensity)/9.0;
+        new_img(i,j)=avg;
+    end
+end
+new_img = uint8(new_img);
+figure(1)
+imshow(img)
+title('Original image')
+figure(2)
+imshow(noise_img)
+title('Noisy image')
+figure(3)
+imshow(new_img)
+title('Filtered image')
+
+12.Write a program for smoothing of an image using min,max and median filter.
+clc;
+close;
+clear;
+img = imread('cameraman.tif');
+noise_img = imnoise(img,'salt & pepper',0.01);
+[rows,cols] = size(noise_img);
+new_img = zeros(rows,cols);
+for x = 2 : rows-1
+    for y = 2 : cols-1
+        intensity = [img(x-1,y-1),img(x-1,y),img(x-1,y+1),...
+            img(x,y-1),img(x,y),img(x,y+1),...
+            img(x+1,y-1),img(x+1,y),img(x+1,y+1)];
+        n = length(intensity);
+        for i = 1:n-1
+            for j = 1 : n-i
+                if intensity(j)>intensity(j+1)
+                    temp = intensity(j) ;
+                    intensity(j) = intensity(j+1);
+                    intensity(j+1)=temp;
+                end
+            end
+        end
+        median = intensity(9);
+        new_img(x,y) = median;
+        %for min = intensity(1)
+        %for max = intesity(9);
+    end
+end
+new_img = uint8(new_img);
+figure(1)
+imshow(img)
+title('Original image')
+figure(2)
+imshow(noise_img)
+title('Noisy image')
+figure(3)
+imshow(new_img)
+title('Filtered image')
+
+
+
+
